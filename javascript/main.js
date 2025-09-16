@@ -1,7 +1,12 @@
+import Balle from "./balle.js";
+import Plateforme from "./plateforme.js";
+
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const gauche = document.getElementById("gauche");
 const droite = document.getElementById("droite");
+const balle = new Balle(50, 50);
+const plateforme = new Plateforme(60, 50);
 
 function isMobileDevice() {
     if (navigator.userAgent.match(/iPhone/i)
@@ -29,6 +34,8 @@ function resize() {
 function draw() {
     ctx.fillstyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
+    balle.draw(ctx);
+    plateforme.draw(ctx);
 }
 
 resize();

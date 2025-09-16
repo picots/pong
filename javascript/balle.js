@@ -6,9 +6,10 @@ class Balle extends Forme {
     }
 
     draw(ctx) {
+        console.log("méthode draw Balle");
         ctx.fillstyle = "black";
         ctx.beginPath();
-        ctx.arc(x, y, 50, 0, 2 * Math.PI);
+        ctx.arc(x, y, 25, 0, 2 * Math.PI);
         ctx.stroke();
     }
 }

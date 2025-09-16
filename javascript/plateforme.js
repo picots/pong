@@ -6,6 +6,7 @@ class Plateforme extends Forme {
     }
 
     draw(ctx) {
+        console.log("méthode draw Rectangle");
         ctx.fillstyle("black");
         ctx.fillRect(x, y, 10, 50);
     }
