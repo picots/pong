@@ -18,16 +18,17 @@ function isMobileDevice() {
 
 function resize() {
     if(isMobileDevice()){
-        canvas.height = 300;
         gauche.hidden = droite.hidden = false;
+        canvas.height = 500;
     }
     else
         gauche.hidden = droite.hidden = true;
+        
 }
 
 function draw() {
     ctx.fillstyle = "black";
-    ctx.fillRect(0, 0, 100, 150);
+    ctx.strokeRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 }
 
 resize();
