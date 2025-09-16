@@ -28,7 +28,7 @@ function resize() {
 
 function draw() {
     ctx.fillstyle = "black";
-    ctx.strokeRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    ctx.strokeRect(0, 0, canvas.width, canvas.height);
 }
 
 resize();
