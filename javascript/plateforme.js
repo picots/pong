@@ -1,5 +1,5 @@
 class Plateforme extends Forme {
-    constructor() {
-        super();
+    constructor(x, y) {
+        super(x, y);
     }
 }
