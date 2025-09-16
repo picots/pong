@@ -10,20 +10,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
-<body>
-    <div class="divider divider-primary" >
-        <h1 class="text-primary">Solo Pong</h1>
+<body class="min-h-screen flex flex-col items-center justify-start gap-6 p-4">
+    <div class="divider divider-primary w-full">
+        <h1 class="text-primary text-2xl font-bold">Solo Pong</h1>
     </div>
-        <canvas id="pong" width="500" height="700"
-        aria-label="Jeu Solo Pong. Déplacez la raquette avec les boutons dédiés ou avec les flèches droite/gauche ">
-        Votre navigateur ne supporte pas le canvas
+
+    <div class="flex justify-center w-full">
+        <canvas id="pong" width="350" height="600"
+            aria-label="Jeu Solo Pong. Déplacez la raquette avec les boutons dédiés ou avec les flèches droite/gauche ">
+            Votre navigateur ne supporte pas le canvas
         </canvas>
     </div>
-    <div class="text-center">
+
+    <div class="text-center space-y-4">
         <button class="btn btn-primary" id="btn">Nouvelle partie</button>
-        <p id="score">Score : 0s</p>
-        <button class="btn btn-primary" id="gauche"><i class="fa-solid fa-arrow-left"></i></button>
-        <button class="btn btn-primary" id="droite"><i class="fa-solid fa-arrow-right"></i></button>
+        <p id="score">Score : 0</p>
+        <div class="flex justify-center gap-4">
+            <button class="btn btn-primary" id="gauche"><i class="fa-solid fa-arrow-left"></i></button>
+            <button class="btn btn-primary" id="droite"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
     </div>
 
     <script src="javascript/main.js"></script>
