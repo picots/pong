@@ -2,7 +2,8 @@ class Form {
     constructor(x, y, speed) {
         this.x = x;
         this.y = y;
-        this.speed = speed;
+        this.vx = speed;
+        this.vy = speed;
     }
 }
 
@@ -23,17 +24,19 @@ class Ball extends Form {
         ctx.stroke();
     }
 
-    update(canvas){
-        this.x += this.speed/3;
-        this.y -= this.speed;
-        if (this.x > canvas.width - this.r) {
-            this.x -= speed;
-        }
-        if (this.x < 0){
-            this.x += speed;
-        }
-        if(this.y < 0){
-            console.log("en dehors");
+    update(canvas, n, platform) {
+        this.x += this.vx * n;
+        this.y -= this.vy;
+
+        if (this.x + this.r > canvas.width || this.x - this.r < 0)
+            this.vx *= -1;
+        if (this.y - this.r < 0)
+            this.vy *= -1;
+        if (this.y + this.r > canvas.height)
+            isEnd = true;
+        if (this.y + this.r >= platform.y && this.x >= platform.x && this.x <= platform.x + 70) {
+            this.vy *= -1; 
+            this.y = platform.y - this.r;
         }
     }
 }
@@ -46,34 +49,47 @@ class Platform extends Form {
     draw(ctx) {
         ctx.fillStyle = "blue";
         ctx.beginPath();
-        ctx.moveTo(this.x + 10,  this.y); 
-        ctx.lineTo(this.x + 70 - 10,  this.y);
-        ctx.quadraticCurveTo(this.x + 70,  this.y, this.x + 70,  this.y + 10);
-        ctx.lineTo(this.x + 70,  this.y + 10 - 10);
-        ctx.quadraticCurveTo(this.x + 70,  this.y + 10, this.x + 70 - 10,  this.y + 10);
-        ctx.lineTo(this.x + 10,  this.y + 10);
-        ctx.quadraticCurveTo(this.x,  this.y + 10, this.x,  this.y + 10 - 10);
-        ctx.lineTo(this.x,  this.y + 10);
-        ctx.quadraticCurveTo(this.x,  this.y, this.x + 10,  this.y);
+        ctx.moveTo(this.x + 10, this.y);
+        ctx.lineTo(this.x + 70 - 10, this.y);
+        ctx.quadraticCurveTo(this.x + 70, this.y, this.x + 70, this.y + 10);
+        ctx.lineTo(this.x + 70, this.y + 10 - 10);
+        ctx.quadraticCurveTo(this.x + 70, this.y + 10, this.x + 70 - 10, this.y + 10);
+        ctx.lineTo(this.x + 10, this.y + 10);
+        ctx.quadraticCurveTo(this.x, this.y + 10, this.x, this.y + 10 - 10);
+        ctx.lineTo(this.x, this.y + 10);
+        ctx.quadraticCurveTo(this.x, this.y, this.x + 10, this.y);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
     }
 
-    update(canvas){
-        this.x ++;
+    update(canvas, keys) {
+        if (isMobileDevice()) {
+            if (keys["ArrowRight"]) this.x += speed;
+            else if (keys["ArrowLeft"]) this.x -= speed;
+        }
+        else {
+            if (keys["ArrowRight"] && this.x + 70 < canvas.width) this.x += speed;
+            else if (keys["ArrowLeft"] && this.x > 0) this.x -= speed;
+        }
     }
 }
 
+const speed = 2;
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const left = document.getElementById("left");
 const right = document.getElementById("right");
-const ball = new Ball(canvas.width / 2, canvas.height - 17, 7);
-const plateform = new Platform(canvas.width / 2 - 35, canvas.height - 10);
+const ball = new Ball(canvas.width / 2, canvas.height - 17, 7, speed);
+const platform = new Platform(canvas.width / 2 - 35, canvas.height - 10, speed);
 
-let speed = 2;                 
-let rafId; 
+let rafId;
+let isEnd = false;
+let n = Math.random() < 0.5 ? -1 : 1;
+
+const keys = {};
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
 
 function isMobileDevice() {
     if (navigator.userAgent.match(/iPhone/i)
@@ -94,22 +110,25 @@ function resize() {
         canvas.height = 500;
     }
     else
-        left.hidden = right.hidden = true;      
+        left.hidden = right.hidden = true;
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     ball.draw(ctx);
-    plateform.draw(ctx);
+    platform.draw(ctx);
 }
 
 function loop() {
-    ball.update(canvas);
-    draw();
-    rafId = requestAnimationFrame(loop);
+    if (!isEnd) {
+        ball.update(canvas, n, platform);
+        platform.update(canvas, keys);
+        draw();
+        rafId = requestAnimationFrame(loop);
+    }
 }
 
 resize();
 draw();
-//loop();
+loop();
