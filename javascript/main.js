@@ -1,5 +1,5 @@
-import Balle from "balle.js";
-import Plateforme from "plateforme.js";
+import Balle from "./balle.js";
+import Plateforme from "./plateforme.js";
 
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");

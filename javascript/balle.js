@@ -1,6 +1,6 @@
-import {Forme} from "forme.js";
+import Forme from "./forme.js";
 
-export class Balle extends Forme {
+export default class Balle extends Forme {
     constructor(x, y, r) {
         super(x, y);
         this.r = r;
