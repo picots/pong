@@ -24,7 +24,15 @@ class Ball extends Form {
         ctx.stroke();
     }
 
+    accelerate(){
+        if (Math.random() < 0.1 && this.vx <= 4*this.speed)
+            this.vx += (Math.random() - 0.5) * 0.5;
+        else if (Math.random() > 0.9 && this.vy <= 4*this.speed)
+            this.vy += (Math.random() - 0.5) * 0.5;
+    }
+
     update(canvas, n, platform) {
+        this.accelerate();
         this.x += this.vx * n;
         this.y -= this.vy;
         if (this.x + this.r > canvas.width || this.x - this.r < 0)
@@ -36,6 +44,7 @@ class Ball extends Form {
         if (this.y + this.r >= platform.y && this.x >= platform.x && this.x <= platform.x + 70) {
             this.vy *= -1;
             this.y = platform.y - this.r;
+            this.vx += (Math.random() - 0.5) * 1;
         }
     }
 }
@@ -64,8 +73,8 @@ class Platform extends Form {
 
     update(canvas, keys) {
         if (isMobileDevice()) {
-            if (keys["ArrowRight"]) this.x += speed;
-            else if (keys["ArrowLeft"]) this.x -= speed;
+            if (keys["ArrowRight"]) this.x += this.speed;
+            else if (keys["ArrowLeft"]) this.x -= this.speed;
         }
         else {
             if (keys["ArrowRight"] && this.x + 70 < canvas.width) this.x += speed;
