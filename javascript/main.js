@@ -27,7 +27,6 @@ class Ball extends Form {
     update(canvas, n, platform) {
         this.x += this.vx * n;
         this.y -= this.vy;
-
         if (this.x + this.r > canvas.width || this.x - this.r < 0)
             this.vx *= -1;
         if (this.y - this.r < 0)
@@ -35,7 +34,7 @@ class Ball extends Form {
         if (this.y + this.r > canvas.height)
             isEnd = true;
         if (this.y + this.r >= platform.y && this.x >= platform.x && this.x <= platform.x + 70) {
-            this.vy *= -1; 
+            this.vy *= -1;
             this.y = platform.y - this.r;
         }
     }
@@ -80,12 +79,13 @@ const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const left = document.getElementById("left");
 const right = document.getElementById("right");
+const newGame = document.getElementById("newGame");
 const ball = new Ball(canvas.width / 2, canvas.height - 17, 7, speed);
 const platform = new Platform(canvas.width / 2 - 35, canvas.height - 10, speed);
 
 let rafId;
-let isEnd = false;
-let n = Math.random() < 0.5 ? -1 : 1;
+let isEnd;
+let n;
 
 const keys = {};
 document.addEventListener("keydown", e => keys[e.key] = true);
@@ -129,6 +129,22 @@ function loop() {
     }
 }
 
-resize();
-draw();
-loop();
+function start() {
+    if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+    }
+
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height - 17;
+    ball.vx = ball.vy = 2;
+    platform.x = canvas.width / 2 - 35;
+    isEnd = false;
+    n = Math.random() < 0.5 ? -1 : 1;
+    resize();
+    draw();
+    loop();
+}
+
+start();
+newGame.addEventListener("click", () => start());
