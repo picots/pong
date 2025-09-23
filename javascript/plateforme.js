@@ -1,6 +1,6 @@
-import Forme from "forme.js";
+import {Forme} from "forme.js";
 
-export default class Plateforme extends Forme {
+export class Plateforme extends Forme {
     constructor(x, y) {
         super(x, y);
     }
