@@ -88,8 +88,16 @@ let isEnd;
 let n;
 
 const keys = {};
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
+if (isMobileDevice()) {
+    left.addEventListener("touchstart", () => keys["left"] = true);
+    left.addEventListener("touchend", () => keys["left"] = false);
+    right.addEventListener("touchstart", () => keys["right"] = true);
+    right.addEventListener("touchend", () => keys["right"] = false);
+}
+else {
+    document.addEventListener("keydown", e => keys[e.key] = true);
+    document.addEventListener("keyup", e => keys[e.key] = false);
+}
 
 function isMobileDevice() {
     if (navigator.userAgent.match(/iPhone/i)
