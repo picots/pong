@@ -1,4 +1,4 @@
-import Forme from "./forme.js";
+import Forme from "forme.js";
 
 class Plateforme extends Forme {
     constructor(x, y) {
