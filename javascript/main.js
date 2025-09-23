@@ -1,11 +1,40 @@
-import Balle from "./balle.js";
-import Plateforme from "./plateforme.js";
+class Forme {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Balle extends Forme {
+    constructor(x, y, r) {
+        super(x, y);
+        this.r = r;
+    }
+
+    draw(ctx) {
+        ctx.fillstyle = "black";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+}
+
+class Plateforme extends Forme {
+    constructor(x, y) {
+        super(x, y);
+    }
+
+    draw(ctx) {
+        ctx.fillstyle = "black";
+        ctx.fillRect(this.x, this.y, 50, 10);
+    }
+}
 
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const gauche = document.getElementById("gauche");
 const droite = document.getElementById("droite");
-const balle = new Balle(50, 50);
+const balle = new Balle(250, 20, 5);
 const plateforme = new Plateforme(60, 50);
 
 function isMobileDevice() {
@@ -35,7 +64,7 @@ function draw() {
     ctx.fillstyle = "black";
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
     balle.draw(ctx);
-    plateforme.draw(ctx);
+    //plateforme.draw(ctx);
 }
 
 resize();
