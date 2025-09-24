@@ -15,12 +15,13 @@ class Ball extends Form {
 
     draw(ctx) {
         ctx.fillStyle = "white";
-        ctx.strokeWidth = 3;
+        ctx.lineWidth = 3;
         ctx.strokeStyle = "blue";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
         ctx.fill();
         ctx.stroke();
+        ctx.lineWidth = 1;
     }
 
     accelerate(){
@@ -64,8 +65,8 @@ class Platform extends Form {
 
     update(canvas, keys) {
         if (isMobileDevice()) {
-            if (keys["right"]) this.x += this.speed;
-            else if (keys["left"]) this.x -= this.speed;
+            if (keys["right"] && this.x + 70 < canvas.width) this.x += this.speed;
+            else if (keys["left"] && this.x > 0) this.x -= this.speed;
         }
         else {
             if (keys["ArrowRight"] && this.x + 70 < canvas.width) this.x += this.speed;
