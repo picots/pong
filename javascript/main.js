@@ -104,6 +104,7 @@ let isEnd;
 let n;
 let timer;
 let keys;
+let timeInterval;
 
 if (isMobileDevice()) {
     left.addEventListener("touchstart", () => keys["left"] = true);
@@ -156,6 +157,8 @@ function loop() {
 }
 
 function start() {
+    if(timeInterval)
+        clearInterval(timeInterval);
     if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = null;
