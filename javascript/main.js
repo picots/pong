@@ -25,16 +25,21 @@ class Ball extends Form {
     }
 
     accelerate(){
-        if (Math.random() < 0.1 && this.vx <= 4*this.speed)
+        if(timer % 10 == 0 && timer != 0){
+            this.vy *= 1.005;
+            this.vx *= 1.005;
+        }
+        let nb = Math.random();
+        if (nb < 0.1 && this.vx <= 4*this.speed)
             this.vx += (Math.random() - 0.5) * 0.5;
-        else if (Math.random() > 0.9 && this.vy <= 4*this.speed)
+        else if (nb > 0.9 && this.vy <= 4*this.speed)
             this.vy += (Math.random() - 0.5) * 0.5;
     }
 
     update(canvas, n, platform) {
-        this.accelerate();
         this.x += this.vx * n;
         this.y -= this.vy;
+        this.accelerate();
         if (this.x + this.r > canvas.width || this.x - this.r < 0)
             this.vx *= -1;
         if (this.y - this.r < 0)
@@ -59,7 +64,7 @@ class Platform extends Form {
         ctx.fillStyle = "blue";
         ctx.beginPath();
         ctx.moveTo(this.x + 10, this.y);
-        ctx.lineTo(this.x + 70 - 10, this.y);
+        ctx.lineTo(this.x + 60, this.y);
         ctx.quadraticCurveTo(this.x + 70, this.y, this.x + 70, this.y + 10);
         ctx.lineTo(this.x + 70, this.y + 10 - 10);
         ctx.quadraticCurveTo(this.x + 70, this.y + 10, this.x + 70 - 10, this.y + 10);
@@ -98,8 +103,8 @@ let rafId;
 let isEnd;
 let n;
 let timer;
+let keys;
 
-const keys = {};
 if (isMobileDevice()) {
     left.addEventListener("touchstart", () => keys["left"] = true);
     left.addEventListener("touchend", () => keys["left"] = false);
@@ -142,11 +147,10 @@ function draw() {
 
 function loop() {
     if (!isEnd) {
-        timer++;
         ball.update(canvas, n, platform);
         platform.update(canvas, keys);
         draw();
-        score.innerHTML = "Score : "+ timer;
+        score.innerHTML = "Score : "+ timer + "s";
         rafId = requestAnimationFrame(loop);
     }
 }
@@ -156,7 +160,9 @@ function start() {
         cancelAnimationFrame(rafId);
         rafId = null;
     }
-    timer = setInterval(()=>i++, 1000);
+    keys = {};
+    timer = 0;
+    timeInterval = setInterval(()=>timer++, 1000);
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 17;
     ball.vx = ball.vy = speed;
