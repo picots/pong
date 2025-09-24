@@ -15,11 +15,10 @@ class Ball extends Form {
 
     draw(ctx) {
         ctx.fillStyle = "white";
-        ctx.lineWidth = 3;
+        ctx.strokeWidth = 3;
         ctx.strokeStyle = "blue";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-        ctx.lineWidth = 1;
         ctx.fill();
         ctx.stroke();
     }
@@ -29,11 +28,6 @@ class Ball extends Form {
             this.vy *= 1.005;
             this.vx *= 1.005;
         }
-        let nb = Math.random();
-        if (nb < 0.1 && this.vx <= 4*this.speed)
-            this.vx += (Math.random() - 0.5) * 0.5;
-        else if (nb > 0.9 && this.vy <= 4*this.speed)
-            this.vy += (Math.random() - 0.5) * 0.5;
     }
 
     update(canvas, n, platform) {
@@ -63,16 +57,7 @@ class Platform extends Form {
     draw(ctx) {
         ctx.fillStyle = "blue";
         ctx.beginPath();
-        ctx.moveTo(this.x + 10, this.y);
-        ctx.lineTo(this.x + 60, this.y);
-        ctx.quadraticCurveTo(this.x + 70, this.y, this.x + 70, this.y + 10);
-        ctx.lineTo(this.x + 70, this.y + 10 - 10);
-        ctx.quadraticCurveTo(this.x + 70, this.y + 10, this.x + 70 - 10, this.y + 10);
-        ctx.lineTo(this.x + 10, this.y + 10);
-        ctx.quadraticCurveTo(this.x, this.y + 10, this.x, this.y + 10 - 10);
-        ctx.lineTo(this.x, this.y + 10);
-        ctx.quadraticCurveTo(this.x, this.y, this.x + 10, this.y);
-        ctx.closePath();
+        ctx.roundRect(this.x, this.y, 70, 10, 5);
         ctx.fill();
         ctx.stroke();
     }
@@ -96,26 +81,16 @@ const left = document.getElementById("left");
 const right = document.getElementById("right");
 const newGame = document.getElementById("newGame");
 const score = document.getElementById("score");
-const ball = new Ball(canvas.width / 2, canvas.height - 17, 7, speed);
-const platform = new Platform(canvas.width / 2 - 35, canvas.height - 10, speed);
+
+let ball;
+let platform;
 
 let rafId;
 let isEnd;
 let n;
 let timer;
-let keys;
+let keys = {};
 let timeInterval;
-
-if (isMobileDevice()) {
-    left.addEventListener("touchstart", () => keys["left"] = true);
-    left.addEventListener("touchend", () => keys["left"] = false);
-    right.addEventListener("touchstart", () => keys["right"] = true);
-    right.addEventListener("touchend", () => keys["right"] = false);
-}
-else {
-    document.addEventListener("keydown", e => keys[e.key] = true);
-    document.addEventListener("keyup", e => keys[e.key] = false);
-}
 
 function isMobileDevice() {
     if (navigator.userAgent.match(/iPhone/i)
@@ -163,16 +138,23 @@ function start() {
         cancelAnimationFrame(rafId);
         rafId = null;
     }
-    keys = {};
+    if (isMobileDevice()) {
+        left.addEventListener("touchstart", () => keys["left"] = true);
+        left.addEventListener("touchend", () => keys["left"] = false);
+        right.addEventListener("touchstart", () => keys["right"] = true);
+        right.addEventListener("touchend", () => keys["right"] = false);
+    }
+    else {
+        document.addEventListener("keydown", e => keys[e.key] = true);
+        document.addEventListener("keyup", e => keys[e.key] = false);
+    }
+    resize();
     timer = 0;
     timeInterval = setInterval(()=>timer++, 1000);
-    ball.x = canvas.width / 2;
-    ball.y = canvas.height - 17;
-    ball.vx = ball.vy = speed;
-    platform.x = canvas.width / 2 - 35;
+    ball = new Ball(canvas.width / 2, canvas.height - 17, 7, speed);;
+    platform = new Platform(canvas.width / 2 - 35, canvas.height - 10, speed);
     isEnd = false;
     n = Math.random() < 0.5 ? -1 : 1;
-    resize();
     draw();
     loop();
 }
