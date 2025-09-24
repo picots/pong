@@ -1,16 +1,16 @@
 class Form {
-    constructor(x, y, speed) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.vx = speed;
-        this.vy = speed;
     }
 }
 
 class Ball extends Form {
     constructor(x, y, r, speed) {
-        super(x, y, speed);
+        super(x, y)
         this.r = r;
+        this. vx = speed;
+        this.vy = speed;
     }
 
     draw(ctx) {
@@ -51,7 +51,8 @@ class Ball extends Form {
 
 class Platform extends Form {
     constructor(x, y, speed) {
-        super(x, y, speed);
+        super(x, y);
+        this.speed = speed;
     }
 
     draw(ctx) {
@@ -73,17 +74,17 @@ class Platform extends Form {
 
     update(canvas, keys) {
         if (isMobileDevice()) {
-            if (keys["ArrowRight"]) this.x += this.speed;
-            else if (keys["ArrowLeft"]) this.x -= this.speed;
+            if (keys["right"]) this.x += this.speed;
+            else if (keys["left"]) this.x -= this.speed;
         }
         else {
-            if (keys["ArrowRight"] && this.x + 70 < canvas.width) this.x += speed;
-            else if (keys["ArrowLeft"] && this.x > 0) this.x -= speed;
+            if (keys["ArrowRight"] && this.x + 70 < canvas.width) this.x += this.speed;
+            else if (keys["ArrowLeft"] && this.x > 0) this.x -= this.speed;
         }
     }
 }
 
-const speed = 2;
+const speed = 5;
 const canvas = document.getElementById("pong");
 const ctx = canvas.getContext("2d");
 const left = document.getElementById("left");
@@ -154,7 +155,7 @@ function start() {
 
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 17;
-    ball.vx = ball.vy = 2;
+    ball.vx = ball.vy = speed;
     platform.x = canvas.width / 2 - 35;
     isEnd = false;
     n = Math.random() < 0.5 ? -1 : 1;
