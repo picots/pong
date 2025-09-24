@@ -90,12 +90,14 @@ const ctx = canvas.getContext("2d");
 const left = document.getElementById("left");
 const right = document.getElementById("right");
 const newGame = document.getElementById("newGame");
+const score = document.getElementById("score");
 const ball = new Ball(canvas.width / 2, canvas.height - 17, 7, speed);
 const platform = new Platform(canvas.width / 2 - 35, canvas.height - 10, speed);
 
 let rafId;
 let isEnd;
 let n;
+let timer;
 
 const keys = {};
 if (isMobileDevice()) {
@@ -140,9 +142,11 @@ function draw() {
 
 function loop() {
     if (!isEnd) {
+        timer++;
         ball.update(canvas, n, platform);
         platform.update(canvas, keys);
         draw();
+        score.innerHTML = "Score : "+ timer;
         rafId = requestAnimationFrame(loop);
     }
 }
@@ -152,7 +156,7 @@ function start() {
         cancelAnimationFrame(rafId);
         rafId = null;
     }
-
+    timer = setInterval(()=>i++, 1000);
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 17;
     ball.vx = ball.vy = speed;
