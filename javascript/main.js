@@ -25,9 +25,9 @@ class Ball extends Form {
     }
 
     accelerate(){
-        if(timer % 10 == 0 && timer != 0){
-            this.vy *= 1.005;
-            this.vx *= 1.005;
+        if(timer % 10 == 0 && timer != 0 && this.vx < 3*speed && this.vy < 3*speed){
+            this.vy *= 1 + Math.random()/1000;
+            this.vx *= 1 + Math.random()/1000;
         }
     }
 
@@ -43,8 +43,7 @@ class Ball extends Form {
             isEnd = true;
         if (this.y + this.r >= platform.y && this.x >= platform.x && this.x <= platform.x + 70) {
             this.vy *= -1;
-            this.y = platform.y - this.r;
-            this.vx += (Math.random() - 0.5) * 1;
+            this.vx += Math.random()/10;
         }
     }
 }
