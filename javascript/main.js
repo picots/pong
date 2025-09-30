@@ -159,5 +159,4 @@ function start() {
     loop();
 }
 
-start();
 newGame.addEventListener("click", () => start());
