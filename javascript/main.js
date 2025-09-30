@@ -129,6 +129,8 @@ function loop() {
         score.innerHTML = "Score : "+ timer + "s";
         rafId = requestAnimationFrame(loop);
     }
+    else
+        alert("Vous avez perdu !");
 }
 
 function start() {
